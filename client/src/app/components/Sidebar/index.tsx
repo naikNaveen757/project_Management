@@ -2,9 +2,27 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Briefcase, HomeIcon, LockIcon, LucideIcon, Search, Settings, User, Users } from "lucide-react";
+import {
+  AlertCircle,
+  AlertOctagon,
+  AlertTriangle,
+  Briefcase,
+  ChevronDown,
+  ChevronUp,
+  HomeIcon,
+  Layers3,
+  LockIcon,
+  LucideIcon,
+  Search,
+  Settings,
+  ShieldAlert,
+  User,
+  Users,
+  X,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsSidebarCollapsed } from "@/state";
 
 const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(true);
@@ -15,9 +33,10 @@ const Sidebar = () => {
     (state) => state.global.isSidebarCollapsed,
   );
 
-  const sidebarClassNames = `fixed flex-col h-[100%] justify-between shadow-xl transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white ${
-    isSidebarCollapsed ? "w-16" : "w-64"
-  }`;
+  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
+    transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white
+    ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}
+  `;
 
   return (
     <div className={sidebarClassNames}>
@@ -26,6 +45,16 @@ const Sidebar = () => {
           <div className="text-xl font-bold text-gray-800 dark:text-white">
             Dashboard
           </div>
+          {isSidebarCollapsed ? null : (
+            <button
+              className="py-3"
+              onClick={() => {
+                dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
+              }}
+            >
+              <X className="h-6 w-6 text-gray-800 hover:text-gray-500 dark:text-white" />
+            </button>
+          )}
         </div>
         {/* TEAM */}
         <div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-600">
@@ -51,6 +80,56 @@ const Sidebar = () => {
           <SidebarLink icon={User} label="Users" href="/users" />
           <SidebarLink icon={Users} label="Teams" href="/teams" />
         </nav>
+        {/* PROJECT LINKS */}
+        <button
+          onClick={() => setShowProjects((prev) => !prev)}
+          className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
+        >
+          <span className="">Projects</span>
+          {showProjects ? (
+            <ChevronUp className="h-5 w-5" />
+          ) : (
+            <ChevronDown className="h-5 w-5" />
+          )}
+        </button>
+        {/* PROJECT LIST */}
+
+        <button
+          onClick={() => setShowPriority((previous) => !previous)}
+          className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
+        >
+          <span className="">Priority</span>
+          {showProjects ? (
+            <ChevronUp className="h-5 w-5" />
+          ) : (
+            <ChevronDown className="h-5 w-5" />
+          )}
+        </button>
+        {showPriority && (
+          <>
+            <SidebarLink
+              icon={AlertCircle}
+              label="Urgent"
+              href="/priority/urgent"
+            />
+            <SidebarLink
+              icon={ShieldAlert}
+              label="High"
+              href="/priority/high"
+            />
+            <SidebarLink
+              icon={AlertTriangle}
+              label="Medium"
+              href="/priority/medium"
+            />
+            <SidebarLink icon={AlertOctagon} label="Low" href="/priority/low" />
+            <SidebarLink
+              icon={Layers3}
+              label="Backlog"
+              href="/priority/backlog"
+            />
+          </>
+        )}
       </div>
     </div>
   );
