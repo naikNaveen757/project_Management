@@ -93,7 +93,6 @@ const Sidebar = () => {
           )}
         </button>
         {/* PROJECT LIST */}
-
         <button
           onClick={() => setShowPriority((previous) => !previous)}
           className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
