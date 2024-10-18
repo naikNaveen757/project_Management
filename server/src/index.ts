@@ -7,6 +7,7 @@ import morgan from "morgan";
 
 // Routes Import
 import projectRoutes from "./Routes/projectRoute"
+import taskRoutes from "./Routes/taskRoutes"
 
 
 // config
@@ -26,6 +27,8 @@ app.get("/",(req,res)=> {
 });
 
 app.use("/projects",projectRoutes);
+app.use("/tasks",taskRoutes);
+
 
 // Server
 const port = process.env.PORT || 3000;
